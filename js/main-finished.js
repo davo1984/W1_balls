@@ -13,12 +13,6 @@ function random(min, max) {
     return num;
 }
 
-//capture keypress
-document.addEventListener("keydown", function (event) {
-
-    console.log(event.which);
-})
-
 function Shape(x, y, velX, velY, exists) {
     this.x = x;
     this.y = y;
@@ -41,8 +35,8 @@ function EvilCircle(x, y, velX, velY, exists, color, size) {
 
 EvilCircle.prototype.draw = function (strokeColor) {
     ctx.beginPath();
-    ctx.linewidth = 10;
     ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = 6;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
     ctx.stroke();
@@ -63,25 +57,49 @@ EvilCircle.prototype.checkBounds = function () {
     if ((this.y - 10) <= 0) {
         this.y += height;
     }
-    evilRED.draw();
-    evilGRN.draw();
+    evilRED.draw('red');
+    evilGRN.draw('green');
+}
+/********* 
+ function readControls(whoDunIt, whichWay) {
+************/
+document.addEventListener('keydown', logKey);
+let whichWay = '';
+let whoDunIt = '';
+
+function logKey(e) {
+    //log.textContent += ` ${e.code}`;
+//}
+    console.log('line 65 - initialized readControls');
+    //window.keydown = function (e) {
+        console.log('line 66 - running readControls method');
+        whichWay = e.keyCode;
+        whoDunIt = ""
+    console.log('green match=' + greenKeys.indexOf(whichWay) + 'red match=' + redKeys.indexOf(whichWay));
+        if (redKeys.indexOf(whichWay) != '-1' ) {
+console.log('evilRED');
+            whoDunIt = 'red';
+            evilRED.setControls(whichWay, redKeys);
+        } else if (greenKeys.indexOf(whichWay) != '-1') {
+console.log('evilGRN');
+            whoDunIt = 'green';
+            evilGRN.setControls(whichWay, greenKeys);
+        } else { console.log('should never be HERE, very BAD')}
+        console.log('who=' + whoDunIt + ' way=' + whichWay);
 }
 
-EvilCircle.prototype.setControls = function (
-    up, down, right, left,
-    ) {
+EvilCircle.prototype.setControls = function (direction, keys) {
     let _this = this;
-    window.onkeydown = function (e) {
-        console.log('keyCode='+e.keyCode);
-        if (e.keyCode === left) {
-            _this.x -= _this.velX;
-        } else if (e.keyCode === right) {
-            _this.x += _this.velX;
-        } else if (e.keyCode === up) {
-            _this.y -= _this.velY;
-        } else if (e.keyCode === down) {
-            _this.y += _this.velY;
-        }
+    console.log('direction=' + direction + ' keys=' + keys);
+    if (keys.indexOf(direction) === 3) {
+        _this.x -= _this.velX;
+        console.log('left')
+    } else if (keys.indexOf(direction) === 2) {
+        _this.x += _this.velX;
+    } else if (keys.indexOf(direction) === 0) {
+        _this.y -= _this.velY;
+    } else if (keys.indexOf(direction) === 1) {
+        _this.y += _this.velY;
     }
 }
 
@@ -92,9 +110,9 @@ EvilCircle.prototype.collisionDetect = function (numEaten) {
             const dx = this.x - balls[j].x;
             const dy = this.y - balls[j].y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-//console.log(distance < this.size + balls[j].size);
+            //console.log(distance < this.size + balls[j].size);
             if (distance < this.size + balls[j].size) {
-//console.log('EAT IT:this.size=' + this.size);
+                //console.log('EAT IT:this.size=' + this.size);
                 balls[j].exists = false;
                 ballsInPlay--;
                 numEaten--;
@@ -147,6 +165,20 @@ Ball.prototype.collisionDetect = function () {
     }
 };
 
+let greenKeys = [
+    38,     //up
+    40,     //down
+    39,     //right
+    37      //left
+]
+
+let redKeys = [
+    87,     //up
+    83,     //down
+    68,     //right
+    65      //left
+]
+
 let redPoints = grnPoints = 0;
 const size = 10;
 let EvilX = random(0 + size, height - size);
@@ -191,7 +223,7 @@ while (balls.length < 240) {
         'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
         size
     );
-//console.log('exists='+ball.exists);
+    //console.log('exists='+ball.exists);
     balls.push(ball);
     ballsInPlay++;
 }
@@ -199,19 +231,27 @@ while (balls.length < 240) {
 //console.log({balls})
 
 
-
+let player = '';
+let move;
+//readControls(player, move);
 function loop() {
+    /* console.log('play=' + player + ' move=' + move);
+    if (player == 'red') {
+        console.log("in if")
+        evilRED.setControls(move, redKeys);
+    } else if (player == 'green') {
+        console.log("in else")
+        evilGRN.setControls(move, greenKeys);
+    }***************/
 
-    evilRED.draw('red');
-    evilRED.setControls(87, 83, 68, 65);
+    //evilRED.draw('red');
     evilRED.checkBounds();
     evilRED.collisionDetect(redPoints);
 
-    evilGRN.draw('green');
-    evilGRN.setControls(38, 40, 39, 37);
+    //evilGRN.draw('green');
     evilGRN.checkBounds();
     evilGRN.collisionDetect(grnPoints);
-    
+
     ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
     ctx.fillRect(0, 0, width, height);
 
@@ -224,7 +264,7 @@ function loop() {
     }
 
     document.getElementById("ballCount").innerHTML = ballsInPlay;
-    
+
     requestAnimationFrame(loop);
 }
 
