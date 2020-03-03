@@ -103,7 +103,8 @@ EvilCircle.prototype.setControls = function (direction, keys) {
     }
 }
 
-EvilCircle.prototype.collisionDetect = function (numEaten) {
+EvilCircle.prototype.collisionDetect = function () {
+    let numEaten = 0;
     for (let j = 0; j < balls.length; j++) {
         //if (!(this === balls[j])) {
         if (balls[j].exists) {
@@ -115,10 +116,12 @@ EvilCircle.prototype.collisionDetect = function (numEaten) {
                 //console.log('EAT IT:this.size=' + this.size);
                 balls[j].exists = false;
                 ballsInPlay--;
-                numEaten--;
+                numEaten++;
+                console.log('numEaten='+numEaten+' inPlay='+ballsInPlay+' red='+redPoints+' grn='+grnPoints);
             }
         }
     }
+    return numEaten;
 }
 
 Ball.prototype.draw = function () {
@@ -179,7 +182,8 @@ let redKeys = [
     65      //left
 ]
 
-let redPoints = grnPoints = 0;
+let redPoints = 0;
+let grnPoints = 0;
 const size = 10;
 let EvilX = random(0 + size, height - size);
 let EvilY = random(0 + size, height - size);
@@ -235,22 +239,16 @@ let player = '';
 let move;
 //readControls(player, move);
 function loop() {
-    /* console.log('play=' + player + ' move=' + move);
-    if (player == 'red') {
-        console.log("in if")
-        evilRED.setControls(move, redKeys);
-    } else if (player == 'green') {
-        console.log("in else")
-        evilGRN.setControls(move, greenKeys);
-    }***************/
-
     //evilRED.draw('red');
     evilRED.checkBounds();
-    evilRED.collisionDetect(redPoints);
+    redPoints += evilRED.collisionDetect();
+    redPoints.textContent = ' '+'redPoints'+' ';             //davo
 
     //evilGRN.draw('green');
     evilGRN.checkBounds();
-    evilGRN.collisionDetect(grnPoints);
+    grnPoints += evilGRN.collisionDetect();
+    document.getElementById("greenPoints").innerHTML = ' '+grnPoints+' ';         //davo
+
 
     ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
     ctx.fillRect(0, 0, width, height);
