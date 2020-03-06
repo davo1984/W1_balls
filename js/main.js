@@ -86,6 +86,7 @@ EvilCircle.prototype.collisionDetect = function () {
             if (distance < this.size + balls[j].size) {
 //console.log('EAT IT:this.size=' + this.size);
                 balls[j].exists = false;
+                ballsInPlay--;
             }
         }
     }
@@ -137,24 +138,37 @@ Ball.prototype.collisionDetect = function () {
     }
 };
 
-const size = random(10, 20);
-const EvilX = random(0 + size, height - size);
-const EvilY = random(0 + size, height - size);
-const EvilVelX = random(-7, 7);
-const EvilVelY = random(-7, 7);
-let evilCircle = new EvilCircle(
+const size = 10;
+let EvilX = random(0 + size, height - size);
+let EvilY = random(0 + size, height - size);
+//const EvilVelX = random(-7, 7);
+//const EvilVelY = random(-7, 7);
+let evilRED = new EvilCircle(
     EvilX,
     EvilY,
-    EvilVelX,
-    EvilVelY,
-    'white',
+    0,
+    0,
+    'red',
     true,
     10
 );
 
+EvilX = random(0 + size, height - size);
+EvilY = random(0 + size, height - size);
+let evilGRN = new EvilCircle(
+    EvilX,
+    EvilY,
+    0,
+    0,
+    'green',
+    true,
+    10
+);
+
+let ballsInPlay = 0;
 let balls = [];
 
-while (balls.length < 2500) {
+while (balls.length < 240) {
     const size = random(10, 20);
     let ball = new Ball(
         // ball position always drawn at least one ball width
@@ -167,8 +181,9 @@ while (balls.length < 2500) {
         'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
         size
     );
-    //console.log('exists='+ball.exists);
+//console.log('exists='+ball.exists);
     balls.push(ball);
+    ballsInPlay++;
 }
 
 //console.log({balls})
@@ -176,25 +191,16 @@ while (balls.length < 2500) {
 
 
 function loop() {
-    /*****gimme an evil circle
-const size = random(10, 20);
-const EvilX = random(0 + size, height - size);
-const EvilY = random(0 + size, height - size);
-const EvilVelX = random(-7, 7);
-const EvilVelY = random(-7, 7);
-let evilCircle = new EvilCircle(
-EvilX,
-EvilY,
-EvilVelX,
-EvilVelY,
-'white',
-true,
-10
-); **************/
-    evilCircle.draw();
-    evilCircle.setControls();
-    evilCircle.checkBounds();
-    evilCircle.collisionDetect();
+    evilRED.draw();
+    evilRED.setControls();
+    evilRED.checkBounds();
+    evilRED.collisionDetect();
+
+    evilGRN.draw();
+    evilGRN.setControls();
+    evilGRN.checkBounds();
+    evilGRN.collisionDetect();
+
     ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
     ctx.fillRect(0, 0, width, height);
 
@@ -206,6 +212,8 @@ true,
         }
     }
 
+    document.getElementById("ballCount").innerHTML = ballsInPlay;
+    
     requestAnimationFrame(loop);
 }
 
