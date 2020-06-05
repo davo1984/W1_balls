@@ -4,7 +4,8 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 const width = canvas.width = window.innerWidth;
-const height = canvas.height = window.innerHeight;
+var height = canvas.height = window.innerHeight;
+// height = height -100;
 
 // function to generate random number
 
@@ -117,7 +118,7 @@ EvilCircle.prototype.collisionDetect = function () {
                 balls[j].exists = false;
                 ballsInPlay--;
                 numEaten++;
-                console.log('numEaten='+numEaten+' inPlay='+ballsInPlay+' red='+redPoints+' grn='+grnPoints);
+                // console.log('numEaten='+numEaten+' inPlay='+ballsInPlay+' red='+redPoints+' grn='+grnPoints);
             }
         }
     }
@@ -151,8 +152,6 @@ Ball.prototype.update = function () {
     this.x += this.velX;
     this.y += this.velY;
 }
-
-
 
 Ball.prototype.collisionDetect = function () {
     for (let j = 0; j < balls.length; j++) {
@@ -242,12 +241,13 @@ function loop() {
     //evilRED.draw('red');
     evilRED.checkBounds();
     redPoints += evilRED.collisionDetect();
-    redPoints.textContent = ' '+'redPoints'+' ';             //davo
+    // document.getElementById("redPoints").innerHTM = ' '+redPoints+' ';             //davo
+    // redPoints.textContent = ' '+redPoints+' ';             //davo
 
     //evilGRN.draw('green');
     evilGRN.checkBounds();
     grnPoints += evilGRN.collisionDetect();
-    document.getElementById("greenPoints").innerHTML = ' '+grnPoints+' ';         //davo
+    // document.getElementById("greenPoints").innerHTML = ' '+grnPoints+' ';         //davo
 
 
     ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
