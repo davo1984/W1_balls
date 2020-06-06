@@ -71,18 +71,18 @@ let whoDunIt = '';
 function logKey(e) {
     //log.textContent += ` ${e.code}`;
 //}
-    console.log('line 65 - initialized readControls');
+    // console.log('line 65 - initialized readControls');
     //window.keydown = function (e) {
-        console.log('line 66 - running readControls method');
+        // console.log('line 66 - running readControls method');
         whichWay = e.keyCode;
         whoDunIt = ""
-    console.log('green match=' + greenKeys.indexOf(whichWay) + 'red match=' + redKeys.indexOf(whichWay));
+    // console.log('green match=' + greenKeys.indexOf(whichWay) + 'red match=' + redKeys.indexOf(whichWay));
         if (redKeys.indexOf(whichWay) != '-1' ) {
-console.log('evilRED');
+// console.log('evilRED');
             whoDunIt = 'red';
             evilRED.setControls(whichWay, redKeys);
         } else if (greenKeys.indexOf(whichWay) != '-1') {
-console.log('evilGRN');
+// console.log('evilGRN');
             whoDunIt = 'green';
             evilGRN.setControls(whichWay, greenKeys);
         } else { console.log('should never be HERE, very BAD')}
@@ -91,10 +91,10 @@ console.log('evilGRN');
 
 EvilCircle.prototype.setControls = function (direction, keys) {
     let _this = this;
-    console.log('direction=' + direction + ' keys=' + keys);
+    // console.log('direction=' + direction + ' keys=' + keys);
     if (keys.indexOf(direction) === 3) {
         _this.x -= _this.velX;
-        console.log('left')
+        // console.log('left')
     } else if (keys.indexOf(direction) === 2) {
         _this.x += _this.velX;
     } else if (keys.indexOf(direction) === 0) {

@@ -9,3 +9,5 @@ This code is straight JavaScript and should be able to be hosted almost anywhere
 ### NOTICE
 
 Red only works correctly on the Chrome browser (Edge and any other Chromium based browser should work as well, although I have not tested them). I plan to fix at some future date, just to learn how to make keyCode work on both browser types.
+
+##### There is always more to do.
